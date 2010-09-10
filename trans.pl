@@ -12,7 +12,7 @@ use XML::Parser;
 #
 
 my $input_file = 'USA_Counties_with_FIPS_and_names.svg';
-my $colorize_func = \&colorize_random;
+my $colorize_func = \&colorize_by_state;
 
 sub colorize_random {
 	my ($id, $label) = @_;
@@ -35,8 +35,6 @@ sub colorize_by_state {
 
 	return $state_map{$state};
 }
-
-
 
 ##########################################################################
 #
@@ -64,7 +62,7 @@ sub handle_start {
 	# if you change input files, mess with this to detect country/county/whatever outline
 	#
 
-	if ($tag eq 'path' && $args{id} && $args{'inkscape:label'}){
+	if ($tag eq 'path' && $args{id} && $args{'inkscape:label'} && $args{id} ne 'State_Lines'){
 
 		my $col = &$colorize_func($args{id}, $args{'inkscape:label'});
 		$args{style} =~ s/fill:#d0d0d0;/fill:${col};/;
